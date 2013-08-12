@@ -1,0 +1,5 @@
+django
+gunicorn
+requests
+pyelasticsearch
+django-haystack
