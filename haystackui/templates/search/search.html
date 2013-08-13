@@ -42,36 +42,33 @@
             </div>
             <div class="col-10">
 
-                {% if query %}
-                    <h3>Results</h3>
+                <h3>Results</h3>
 
-                    <div class="alert alert-info" >
-                        {% get_active_facets request as active_facets %}
-                        {% for facet in active_facets %}
-                            <span class="label">{{facet}}</span>
-                        {% endfor %}
-                    </div>
-
-                    <hr/>
-
-                    {% for result in page.object_list %}
-                        <p>
-                            <a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a>
-                        </p>
-                    {% empty %}
-                        <p>No results found.</p>
+                <div class="alert alert-info" >
+                    {% get_active_facets request as active_facets %}
+                    {% for facet in active_facets %}
+                        <a href="{{ request.get_full_path|remove_facet:facet }}" class="label">{{facet|facet_for_humans}} <i class="icon-remove-sign"></i></a>                            
                     {% endfor %}
+                </div>
 
-                    {% if page.has_previous or page.has_next %}
-                        <div>
-                            {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-                            |
-                            {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-                        </div>
-                    {% endif %}
-                {% else %}
-                    {# Show some example queries to run, maybe query syntax, something else? #}
+                <hr/>
+
+                {% for result in page.object_list %}
+                    <p>
+                        <a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a>
+                    </p>
+                {% empty %}
+                    <p>No results found.</p>
+                {% endfor %}
+
+                {% if page.has_previous or page.has_next %}
+                    <div>
+                        {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+                        |
+                        {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+                    </div>
                 {% endif %}
+            
             </div>
         </div>
     </form>
