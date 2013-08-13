@@ -123,6 +123,7 @@ INSTALLED_APPS = (
 
     'haystack',
     
+    'searchdemo',
     'demo',
     'haystackui',
     # Uncomment the next line to enable the admin:
