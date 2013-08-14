@@ -1,7 +1,8 @@
 from django.template import RequestContext, Context
 from haystack.query import SearchQuerySet
 from django.db.models.loading import get_model
-import haystackui
+from haystackui.views import BrowseFilterSearchView
+from haystackui.forms import BrowseFilterSearchForm
 
 from django import template
 register = template.Library()
@@ -40,7 +41,7 @@ def prepare_search_page(context, *args, **kwargs):
         model_klass = get_model(app_label, object_label)
 
 
-    bfsv = haystackui.views.BrowseFilterSearchView(form_class=haystackui.forms.BrowseFilterSearchForm, model=model_klass, facets=available_facets, filter=filter, filter_value=filter_value )
+    bfsv = BrowseFilterSearchView(form_class=BrowseFilterSearchForm, model=model_klass, facets=available_facets, filter=filter, filter_value=filter_value )
     response = bfsv.__call__(request)
 
     context["facets"] = bfsv.build_form()
