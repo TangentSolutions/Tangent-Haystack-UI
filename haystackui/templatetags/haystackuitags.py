@@ -1,7 +1,59 @@
+from django.template import RequestContext, Context
+from haystack.query import SearchQuerySet
+from demo.models import Repo
+from django.db.models.loading import get_model
+import haystackui
+
 from django import template
 register = template.Library()
-from django.template import RequestContext, Context
 
+@register.simple_tag(takes_context=True)
+def prepare_search_page(context, *args, **kwargs):
+    """
+        Returns a list of search results. 
+        Respects haystack conventions for QueryString parameters, but also allows you to explicitly add your own filters
+
+        recommended usage:
+        {% get_search_result model=MyModel available_facets=facet_list browse_by=facet_string as result %}
+
+        parameters: 
+        model = Model Class
+        facet_list = a list of facets that the user can filter by. e.g.: ["tag", "author"]
+        browse_by = facet strong. e.g: "category:tiles"
+
+    """
+
+
+    request = context["request"]
+
+    ## default values:
+    model_string= kwargs.get("model", False)
+    available_facets=kwargs.get("available_facets",[])
+    browse_by=kwargs.get("browse_by",False)
+
+    filter = False 
+    filter_value = False
+    if browse_by:
+        filter, filter_value = browse_by.split(":") 
+
+    if model_string:
+        app_label, object_label = model_string.split(".")
+        model_klass = get_model(app_label, object_label)
+
+
+    bfsv = haystackui.views.BrowseFilterSearchView(form_class=haystackui.forms.BrowseFilterSearchForm, model=model_klass, facets=available_facets, filter=filter, filter_value=filter_value )
+    response = bfsv.__call__(request)
+
+    context["facets"] = bfsv.build_form()
+    context["query"] = bfsv.get_query()
+    sqs = bfsv.get_results()
+    paginator, page = bfsv.build_page()
+    context["page"] = page
+    context["paginator"] = paginator
+    context["facets"] = sqs.facet_counts()
+
+    return page
+    
 
 @register.assignment_tag
 def get_active_facets(request):
@@ -9,7 +61,7 @@ def get_active_facets(request):
     Returns the values that are being used to filter
     """
     
-    selected_facets = request.GET.getlist("selected_facets")
+    selected_facets = request.GET.getlist("selected_facets",[])
     return [(facet.split(":")[0].replace("_exact",""), facet.split(":")[1], 0) for facet in selected_facets]
     
 @register.assignment_tag
@@ -75,6 +127,31 @@ def render_facets(context, variation="default"):
     template_to_render = template.loader.get_template(template_name)
     return template_to_render.render(Context(RequestContext(request, context), autoescape=context.autoescape))
 
+@register.simple_tag(takes_context=True)
+def get_page_url(context, page_number):
+
+    request = context.get("request")
+    path = request.get_full_path()
+
+    try:
+        url, qs = path.split("?")        
+        qs_fragments = qs.split("&")
+
+        for fragment in qs_fragments:
+            # remove paging
+            if fragment.find("page=") >= 0:
+                qs_fragments.remove( fragment )
+
+        qs_fragments.append("page=%s" % page_number)
+        # put it back together
+        url = "%s?%s" % ( url, ("&").join(qs_fragments) )
+
+    except ValueError:
+        url =  "%s?page=%s" % ( path, page_number )
+
+    return url
+
+
 @register.assignment_tag(takes_context=True)
 def get_facet_url(context):
 
@@ -116,6 +193,10 @@ def get_facet_url(context):
             if this_facet_is_active: # remove from qs. 
                 qs_fragments.remove( this_facet_qs_key_value )
                 result["active"] = this_facet_is_active
+
+            # remove paging
+            if fragment.find("page=") >= 0:
+                qs_fragments.remove( fragment )
             
         if not result["active"]:
             qs_fragments.append(this_facet_qs_key_value)

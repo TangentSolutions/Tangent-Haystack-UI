@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load haystackuitags %}
+
+{% block body %}
+{% prepare_search_page model=model_klass available_facets=available_facets browse_by=browse_by %}
+
+{% include "search/search.html" %}
+{% endblock %}

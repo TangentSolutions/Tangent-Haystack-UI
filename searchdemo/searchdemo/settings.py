@@ -161,6 +161,10 @@ LOGGING = {
     }
 }
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+)
+
 
 HAYSTACK_CONNECTIONS = {
     'default': {

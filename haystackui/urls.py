@@ -4,7 +4,7 @@ from haystack.forms import ModelSearchForm, FacetedSearchForm
 from haystackui.forms import BrowseFilterSearchForm
 from haystack.query import SearchQuerySet
 from haystack.views import SearchView, FacetedSearchView, search_view_factory
-from haystackui.views import BrowseFilterSearchView
+from haystackui.views import BrowseFilterSearchView, SimpleSearchView
 
 
 from demo.models import Repo, Author
@@ -34,6 +34,7 @@ urlpatterns = patterns('',
                         searchqueryset=SearchQuerySet().all().facet("author").facet("tag")),             
             name='haystack_faceted_search'),
 
+    url(r'^templatetagexample/$', SimpleSearchView.as_view() , name='haystack_templatetagexample'),
     url(r'^autocomplete/$', 'haystackui.views.autocomplete', name='haystack_autocomplete_search'),
 )
 
