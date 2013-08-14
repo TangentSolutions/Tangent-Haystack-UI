@@ -19,31 +19,13 @@
 
         <div class="row">
             <div class="col-2" >
-                
-                {% if facets %}
-                {% for facet_key, items in facets.fields.items %}
-
-                    <h3>{{facet_key}}</h3>
-                    {% if items %}
-                        <ul>
-                            {% for facet_value, facet_count in items %}
-                            {% render_facet %}
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                {% endfor %}
-                {% endif %}
+                {% render_facets %}
             </div>
             <div class="col-10">
 
                 <h3>Results</h3>
 
-                <div class="alert alert-info" >
-                    {% get_active_facets request as active_facets %}
-                    {% for facet in active_facets %}
-                        <a href="{{ request.get_full_path|remove_facet:facet }}" class="label">{{facet|facet_for_humans}} <i class="icon-remove-sign"></i></a>                            
-                    {% endfor %}
-                </div>
+                {% render_active_facet_tags %}                
 
                 <hr/>
 
@@ -53,13 +35,7 @@
                     <p>No results found.</p>
                 {% endfor %}
 
-                {% if page.has_previous or page.has_next %}
-                    <div>
-                        {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-                        |
-                        {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-                    </div>
-                {% endif %}
+                {% pagination %}
             
             </div>
         </div>

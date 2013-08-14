@@ -1,0 +1,16 @@
+{% load haystackui %}
+
+{% get_active_facets request as active_facets %}
+
+{% if active_facets %}
+    <div class="active-facets alert" >
+    {% for facet_key,facet_value,facet_count in active_facets %}
+        
+        {% get_facet_url as facet_url %}
+        <a href="{{ facet_url.url }}" class="label">
+            {{facet_key|cut:"_exact"}}: {{facet_value}} <i class="icon-remove-sign"></i>
+        </a>                             
+        
+    {% endfor %}
+    </div>
+{% endif %}

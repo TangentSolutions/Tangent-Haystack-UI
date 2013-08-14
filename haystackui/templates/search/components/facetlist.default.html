@@ -1,0 +1,17 @@
+{% load haystackui %}
+{% if facets %}
+{% for facet_key, items in facets.fields.items %}    
+    <h3>{{facet_key}}</h3>
+    {% if items %}
+        <div class="list-group facet-group facet-{{facet_key|slugify}}">
+            {% for facet_value, facet_count in items %}
+            {% get_facet_url as facet_url %}
+            <a href="{{ facet_url.url }}" class="facet-item list-group-item {{facet_url.active|yesno:"active,not-active"}}">
+                <span class="badge">{{facet_count}}</span>
+                {{facet_value}}
+            </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endfor %}
+{% endif %}

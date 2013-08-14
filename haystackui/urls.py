@@ -26,7 +26,7 @@ url_configs = [
 
 urlpatterns = patterns('',
     # default haystack search:
-    url(r'^repos/$', BrowseFilterSearchView(form_class=BrowseFilterSearchForm, model=Repo, facets=["author", "tag"]), name='haystack_browse_search'),
+    url(r'^repos/$', BrowseFilterSearchView(form_class=BrowseFilterSearchForm, model=Repo, facets=["author", "tag"], results_per_page=3), name='haystack_browse_search'),
     url(r'^repos/(?P<filter>[a-zA-Z0-9-]+)/(?P<filter_value>[a-zA-Z0-9-]+)/$', BrowseFilterSearchView(form_class=BrowseFilterSearchForm, model=Repo, facets=["author", "tag"]), name='haystack_browse_search'),
 
     url(r'^$', FacetedSearchView(

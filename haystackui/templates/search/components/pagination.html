@@ -1,0 +1,20 @@
+{% if page.paginator.num_pages > 1 %}
+<div class="btn-group">
+    {% if page.has_previous %}
+        <a class="btn btn-mini" href="?page={{ page.previous_page_number }}"><i class="icon-angle-left"></i></a>
+    {% endif %}
+    <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+        Page {{page.number}}
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+    {% for page in page.paginator.page_range %}                
+        <li><a href="?page={{page}}" >Page {{page}}</a></li>
+    {% endfor %}            
+    </ul>
+
+    {% if page.has_next %}
+        <a class="btn btn-mini" href="?page={{ page.next_page_number }}"><i class="icon-angle-right"></i></a>
+    {% endif %}
+</div>                
+{% endif %}
