@@ -19,21 +19,15 @@
 
         <div class="row">
             <div class="col-2" >
-                {% get_active_facet_filters request as active_filters %}
                 
                 {% if facets %}
-                {% for heading, items in facets.fields.items %}
+                {% for facet_key, items in facets.fields.items %}
 
-                    <h3>{{heading}}</h3>
+                    <h3>{{facet_key}}</h3>
                     {% if items %}
                         <ul>
-                            {% for name, count in items %}
-                            <li>
-                                {% if name in active_filters %}[Active]{% endif %}
-                                <a href="{{ request.get_full_path }}&amp;selected_facets={{heading}}_exact:{{ name|urlencode }}">
-                                    {{name}} <span class="badge">{{count}}</span>
-                                </a>
-                            </li>
+                            {% for facet_value, facet_count in items %}
+                            {% render_facet %}
                             {% endfor %}
                         </ul>
                     {% endif %}
@@ -54,9 +48,7 @@
                 <hr/>
 
                 {% for result in page.object_list %}
-                    <p>
-                        <a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a>
-                    </p>
+                    {% render_result %}
                 {% empty %}
                     <p>No results found.</p>
                 {% endfor %}

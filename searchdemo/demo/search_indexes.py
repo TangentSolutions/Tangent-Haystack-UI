@@ -19,9 +19,29 @@ class RepoIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_tag(self, obj):
         return [(tag.name) for tag in obj.tags.all()]
 
+
 class AuthorIndex(indexes.SearchIndex, indexes.Indexable):
 
     text = indexes.CharField(document=True, use_template=True)
 
     def get_model(self):
         return Author
+
+"""
+given a model. Load the index
+
+import importlib
+app = Repo._meta.app_label
+mod = importlib.import_module(app)
+indexes = mod.search_indexes
+index = getattr(indexes, "%sIndex" % Repo._meta.object_name )
+
+facets = []
+
+for label, field in index.fields.items()
+    if field.faceted:
+        facets.append(label)
+
+
+
+"""
