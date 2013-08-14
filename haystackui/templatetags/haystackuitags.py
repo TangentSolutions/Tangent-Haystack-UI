@@ -1,6 +1,5 @@
 from django.template import RequestContext, Context
 from haystack.query import SearchQuerySet
-from demo.models import Repo
 from django.db.models.loading import get_model
 import haystackui
 

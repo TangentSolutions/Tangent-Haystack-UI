@@ -1,19 +1,22 @@
 Tangent-Haystack-UI
 ===================
 
+
+
 Is a thin wrapper around [HayStack](http://django-haystack.readthedocs.org/). Basically it just provides a concrete implementation of the various uses outlined in the docs. 
 
 ## Features:
 
 - [ ] Full-text search with autocomplete
-- [ ] Search grouped by model
-- [ ] Browse by category with filter/narrow by many facets
-- [ ] ..
+- [x] Search grouped by model
+- [x] Browse by category with filter/narrow by many facets
+- [x] A bunch of templatetags 
 
 
 ## Installation: 
 
-..
+	pip install -e git+ssh://git@github.com/TangentSolutions/Tangent-Haystack-UI.git#egg=haystackui
+
 
 ## Configuration: 
 
