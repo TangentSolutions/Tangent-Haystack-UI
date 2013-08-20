@@ -8,7 +8,7 @@
             {% get_facet_url as facet_url %}
             <a href="{{ facet_url.url }}" class="facet-item list-group-item {{facet_url.active|yesno:"active,not-active"}}">
                 <span class="badge">{{facet_count}}</span>
-                {{facet_value}}
+                {{facet_value|unquote}}
             </a>
             {% endfor %}
         </div>

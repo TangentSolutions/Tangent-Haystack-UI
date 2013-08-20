@@ -6,6 +6,7 @@ from haystackui.forms import BrowseFilterSearchForm
 
 from django import template
 register = template.Library()
+import urllib2
 
 @register.simple_tag(takes_context=True)
 def prepare_search_page(context, *args, **kwargs):
@@ -71,6 +72,10 @@ def get_active_facet_filters(request):
     """
     qs_facets = request.GET.getlist("selected_facets")
     return [value.split(":")[1] for value in qs_facets]
+
+@register.filter
+def unquote(value):
+    return urllib2.unquote(value)
 
 @register.filter(name='remove_facet')
 def remove_facet(path, facet):
