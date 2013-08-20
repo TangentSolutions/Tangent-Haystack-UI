@@ -19,9 +19,22 @@ class BrowseFilterSearchForm(FacetedSearchForm):
         if self.model:
             sqs = sqs.models(self.model)
 
+            # add facets for model
+            import importlib
+            app = self.model._meta.app_label
+            mod = importlib.import_module(app)
+            indexes = mod.search_indexes
+            index = getattr(indexes, "%sIndex" % self.model._meta.object_name )
+
+            for label, field in index.fields.items():
+                if field.faceted:
+                    sqs = sqs.facet(label)
+
         # provide facets
         for facet in self.available_facets:
             sqs = sqs.facet(facet)
+
+
 
         if self.filter and self.filter_value: 
             sqs = sqs.narrow("%s_exact:%s" % (self.filter, self.filter_value) )

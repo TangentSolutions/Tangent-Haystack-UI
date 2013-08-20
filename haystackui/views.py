@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from haystack.query import SearchQuerySet
 from haystack.views import FacetedSearchView
+from django.db.models.loading import get_model
 
 import json
 import importlib
@@ -43,29 +44,13 @@ class BrowseFilterSearchView(FacetedSearchView):
         
     def __call__(self, *args, **kwargs):
         
+        model_string = kwargs.pop("model", False)        
+        app,model = model_string.split(".")
+        self.model = get_model(app,model)
         self.filter = kwargs.pop("filter", False)        
         self.filter_value = kwargs.pop("filter_value",False)
 
         return super(BrowseFilterSearchView, self).__call__(*args, **kwargs)
-
-
-class SimpleSearchView(TemplateView):
-    """
-    todo: move this to demo
-    """
-
-    # limit to selected model
-    template_name = "search/templatetag-search.html"
-
-    def get_context_data(self, **kwargs):
-        from demo.models import Repo
-        context = super(SimpleSearchView, self).get_context_data(**kwargs)
-        
-        context['model_klass'] = "demo.Repo"
-        context['available_facets'] = ["tag"]
-        context['browse_by'] = "tag:python"
-        return context
-        
 
 
 def autocomplete(request):
@@ -76,3 +61,6 @@ def autocomplete(request):
         'results': suggestions
     })
     return HttpResponse(the_data, content_type='application/json')
+
+
+

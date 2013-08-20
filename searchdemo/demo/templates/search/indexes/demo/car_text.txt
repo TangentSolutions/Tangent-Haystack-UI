@@ -1,0 +1,5 @@
+{{object.name}}
+{{object.make}}
+{{object.model}}
+{{object.body}}
+{{object.year}}

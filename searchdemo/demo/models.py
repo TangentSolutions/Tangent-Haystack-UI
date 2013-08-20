@@ -33,3 +33,15 @@ class Tag(models.Model):
 
     def __unicode__(self):
         return self.name
+
+class Car(models.Model):
+
+    model_id = models.PositiveIntegerField()
+    make = models.CharField(max_length=200, blank=True, null=True)
+    name = models.CharField(max_length=200, blank=True, null=True)    
+    trim = models.CharField(max_length=200, blank=True, null=True)    
+    body = models.CharField(max_length=200, blank=True, null=True)
+
+    year = models.PositiveIntegerField(blank=True, null=True)
+    seats = models.PositiveIntegerField(blank=True, null=True)
+    doors = models.PositiveIntegerField(blank=True, null=True)

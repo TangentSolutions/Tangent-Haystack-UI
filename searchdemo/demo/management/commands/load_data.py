@@ -7,7 +7,7 @@ import random
 class Command(BaseCommand):
     
     def handle(self, *args, **options):
-
+        
         headers = {"Accept":"application/vnd.github.preview"}
         url = "https://api.github.com/search/repositories?q=python"
         response=requests.get(url,headers=headers)

@@ -44,7 +44,7 @@ def prepare_search_page(context, *args, **kwargs):
     bfsv = BrowseFilterSearchView(form_class=BrowseFilterSearchForm, model=model_klass, facets=available_facets, filter=filter, filter_value=filter_value )
     response = bfsv.__call__(request)
 
-    context["facets"] = bfsv.build_form()
+    context["form"] = bfsv.build_form()
     context["query"] = bfsv.get_query()
     sqs = bfsv.get_results()
     paginator, page = bfsv.build_page()

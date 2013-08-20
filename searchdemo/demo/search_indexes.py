@@ -27,6 +27,23 @@ class AuthorIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return Author
 
+class CarIndex(indexes.SearchIndex, indexes.Indexable):
+
+    text = indexes.CharField(document=True, use_template=True)
+
+    make = indexes.CharField(model_attr='make', faceted=True) 
+    name = indexes.CharField(model_attr='name', faceted=True) 
+    trim = indexes.CharField(model_attr='trim', faceted=True) 
+    body = indexes.CharField(model_attr='body', faceted=True) 
+    
+    year = indexes.IntegerField(model_attr='year', faceted=True) 
+    seats = indexes.IntegerField(model_attr='seats', faceted=True, null=True)
+    doors = indexes.IntegerField(model_attr='doors', faceted=True, null=True)
+
+    def get_model(self):
+        return Car
+
+
 """
 given a model. Load the index
 
