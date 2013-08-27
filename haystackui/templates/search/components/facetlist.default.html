@@ -1,8 +1,8 @@
 {% load haystackuitags %}
 {% if facets %}
-{% for facet_key, items in facets.fields.items %}    
-    <h3>{{facet_key}}</h3>
+{% for facet_key, items in facets.fields.items %}  
     {% if items %}
+        <h3>{{facet_key}}</h3>    
         <div class="list-group facet-group facet-{{facet_key|slugify}}">
             {% for facet_value, facet_count in items %}
             {% get_facet_url as facet_url %}

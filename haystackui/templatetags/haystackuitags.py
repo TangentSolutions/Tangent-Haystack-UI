@@ -217,6 +217,13 @@ def get_facet_url(context):
     return result
 
     
-    
-    
+@register.assignment_tag
+def broaden_search(query):
+    words = query.split(" ")
+    if len(words)>1: 
+        return words
 
+    return False
+
+
+    
