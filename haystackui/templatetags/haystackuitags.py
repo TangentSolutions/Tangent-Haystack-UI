@@ -132,6 +132,31 @@ def render_facets(context, variation="default"):
     template_to_render = template.loader.get_template(template_name)
     return template_to_render.render(Context(RequestContext(request, context), autoescape=context.autoescape))
 
+## todo: this an get_page_url are +- the same. Refactor 
+@register.simple_tag(takes_context=True)
+def order_by_url(context, order):
+    request = context.get("request")
+    path = request.get_full_path()
+
+    try:
+        url, qs = path.split("?")        
+        qs_fragments = qs.split("&")
+
+        for fragment in qs_fragments:
+            # remove ordering
+            if fragment.find("order=") >= 0:
+                qs_fragments.remove( fragment )
+
+        qs_fragments.append("order=%s" % order)
+        # put it back together
+        url = "%s?%s" % ( url, ("&").join(qs_fragments) )
+
+    except ValueError:
+        url =  "%s?order=%s" % ( path, order )
+
+    return url
+
+
 @register.simple_tag(takes_context=True)
 def get_page_url(context, page_number):
 
