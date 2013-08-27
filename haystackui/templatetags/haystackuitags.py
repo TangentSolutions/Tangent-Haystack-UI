@@ -134,7 +134,7 @@ def render_facets(context, variation="default"):
 
 ## todo: this an get_page_url are +- the same. Refactor 
 @register.simple_tag(takes_context=True)
-def order_by_url(context, order):
+def get_order_by_url(context, order):
     request = context.get("request")
     path = request.get_full_path()
 
