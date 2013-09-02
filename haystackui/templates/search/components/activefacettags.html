@@ -8,7 +8,7 @@
         
         {% get_facet_url as facet_url %}
         <a href="{{ facet_url.url }}" class="label">
-            {{facet_key|cut:"_exact"}}: {{facet_value}} <i class="icon-remove-sign"></i>
+            {{facet_key|cut:"_exact"}}: {{facet_value|deslugify|lower}} <i class="icon-remove-sign"></i>
         </a>                             
         
     {% endfor %}

@@ -63,7 +63,7 @@ def get_active_facets(request):
     """
     
     selected_facets = request.GET.getlist("selected_facets",[])
-    return [(facet.split(":")[0].replace("_exact",""), facet.split(":")[1], 0) for facet in selected_facets]
+    return [(facet.split(":")[0].replace("_exact",""), urllib2.quote(facet.split(":")[1]), 0) for facet in selected_facets]
     
 @register.assignment_tag
 def get_active_facet_filters(request):
@@ -76,6 +76,10 @@ def get_active_facet_filters(request):
 @register.filter
 def unquote(value):
     return urllib2.unquote(value)
+
+@register.filter
+def deslugify(value):
+    return value.replace("-", " ")
 
 @register.filter(name='remove_facet')
 def remove_facet(path, facet):
