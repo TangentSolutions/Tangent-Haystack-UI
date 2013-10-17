@@ -218,7 +218,7 @@ def get_facet_url(context):
     try:
         # get the current situation:
         url, qs = path.split("?")        
-        qs_fragments = qs.split("&")
+        qs_fragments = urllib2.unquote(qs).split("&")
 
         for fragment in qs_fragments:
 
